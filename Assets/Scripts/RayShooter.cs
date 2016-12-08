@@ -4,6 +4,9 @@ using UnityEngine.EventSystems;
 
 public class RayShooter : MonoBehaviour {
 	private Camera _camera;
+	[SerializeField] private AudioSource soundSource;
+	[SerializeField] private AudioClip hitWallSound;
+	[SerializeField] private AudioClip hitEnemySound;
 
 	void Start() {
 		_camera = GetComponent<Camera>();
@@ -29,9 +32,15 @@ public class RayShooter : MonoBehaviour {
 				ReactiveTarget target = hitObject.GetComponent<ReactiveTarget>();
 				if (target != null) {
 					target.ReactToHit();
+					soundSource.PlayOneShot(hitEnemySound);
+					/*soundSource.clip = hitEnemySound;
+					soundSource.Play();*/
 					Messenger.Broadcast(GameEvent.ENEMY_HIT);
 				} else {
 					StartCoroutine(SphereIndicator(hit.point));
+					soundSource.PlayOneShot(hitWallSound);
+					/*soundSource.clip = hitWallSound;
+					soundSource.Play();*/
 				}
 			}
 		}

@@ -3,7 +3,7 @@ using System.Collections;
 
 public class WanderingAI : MonoBehaviour {
 	public float speed = 3.0f;
-	public float obstacleRange = 1.0f;
+	public float obstacleRange = 5.0f;
 	
 	[SerializeField] private GameObject fireballPrefab;
 	private GameObject _fireball;
@@ -30,17 +30,17 @@ public class WanderingAI : MonoBehaviour {
 			
 			Ray ray = new Ray(transform.position, transform.forward);
 			RaycastHit hit;
-			if (Physics.SphereCast(ray, 15f, out hit)) {
+			if (Physics.SphereCast(ray, 0.75f, out hit)) {
 				GameObject hitObject = hit.transform.gameObject;
-				Debug.Log(hit.distance);
+				//Debug.Log(hit.distance);
 				if (hitObject.GetComponent<PlayerCharacter>()) {
+					Debug.Log("开火");
 					if (_fireball == null) {
 						_fireball = Instantiate(fireballPrefab) as GameObject;
 						_fireball.transform.position = transform.TransformPoint(Vector3.forward * 1.5f);
 						_fireball.transform.rotation = transform.rotation;
 					}
 				} else if (hit.distance < obstacleRange) {
-					Debug.Log("转向");
 					float angle = Random.Range(-110, 110);
 					transform.Rotate(0, angle, 0);
 				}
